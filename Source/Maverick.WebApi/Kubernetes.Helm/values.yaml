@@ -1,0 +1,46 @@
+parentDomain: {{k8sParentDomain}}
+replicaCount: 1
+image:
+  repository: {{dockerHubUser}}/{{webAPIHelmChartName}}
+  tag: 0
+dockerRegistrationSecret: ole-docker-reg
+
+# Runtime
+ASPNETCORE_ENVIRONMENT: "Development"
+ApplicationInsights__Enabled: "false"
+TZ: "America/Sao_Paulo"
+
+AllowedHosts: "*"
+RequestTrackerConfiguration__RequestTrackerEnabled: "true"
+DistributedCacheConfiguration__CacheStorageType: "SqlServer"
+DistributedCacheConfiguration__CacheSqlConnectionString: "{{cacheSqlConnectionString}};Application Name={{webAPIHelmChartName}};"
+DistributedCacheConfiguration__CacheSqlSchemaName: "dbo"
+DistributedCacheConfiguration__CacheSqlTableName: "{{cacheTable}}"
+
+# Log
+Serilog__MinimumLevel__Default: Warning
+Serilog__MinimumLevel__Override__Ole: Information
+Serilog__MinimumLevel__Override__Otc: Information
+
+# Core
+# variaveis de ambiente que afetam comportamentos de negocio
+
+# Tmdb
+TmdbAdapterConfiguration__TmdbApiUrlBase: "https://api.themoviedb.org/3"
+TmdbAdapterConfiguration__TmdbApiKey: "1f54bd990f1cdfb230adb312546d765d"
+TmdbAdapterConfiguration__TempoDeCacheDaPesquisaEmSegundos: 30
+TmdbAdapterConfiguration__Idioma: "pt-BR"
+
+# DB
+# strings de conexao com banco de dados
+
+# Recursos
+memoryRequest: "256Mi"
+cpuRequest: "100m"
+memoryLimit: "384Mi"
+cpuLimit: "400m"
+
+# Jwt
+JwtConfiguration__Audience: "{{webAPIHelmChartName}}"
+JwtConfiguration__Issuer: "{{webAPIHelmChartName}}"
+JwtConfiguration__SecretKey: "{{uniqueIdentifier}}"
